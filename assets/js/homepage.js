@@ -101,5 +101,11 @@ var displayRepos = function (repos, searchTerm) {
   }
 };
 
+var getFeaturedRepos = function (language) {
+  var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues"
+
+  fetch(apiUrl)
+}
+
 // add event listeners to forms
 userFormEl.addEventListener("submit", formSubmitHandler);
