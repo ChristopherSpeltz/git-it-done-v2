@@ -3,6 +3,24 @@ var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
 
+// function to be executed upon a form submission browser event
+var formSubmitHandler = function (event) {
+  event.preventDefault();
+  console.log(event);
+  //   get value from input element
+  var username = nameInputEl.value.trim();
+
+  if (username) {
+    getUsersRepos(username);
+
+    // clear old content
+    repoContainerEl.textContent = ""
+    nameInputEl.value = "";
+  } else {
+    alert("Please enter a GitHub username");
+  }
+};
+
 var getUsersRepos = function (user) {
   // format the github api url
   var apiUrl = "https://api.github.com/users/" + user + "/repos";
@@ -26,22 +44,6 @@ var getUsersRepos = function (user) {
     });
 };
 
-// function to be executed upon a form submission browser event
-var formSubmitHandler = function (event) {
-  event.preventDefault();
-  console.log(event);
-  //   get value from input element
-  var username = nameInputEl.value.trim();
-
-  if (username) {
-    getUsersRepos(username);
-    nameInputEl.value = "";
-  } else {
-    alert("Please enter a GitHub username");
-  }
-};
-
-userFormEl.addEventListener("submit", formSubmitHandler);
 
 // function will accept both the array of repository data and the term we searched for as parameters
 var displayRepos = function (repos, searchTerm) {
@@ -54,15 +56,15 @@ var displayRepos = function (repos, searchTerm) {
     return;
   }
 
-  //   clear old content
-  repoContainerEl.textContent = "";
+  // //   clear old content
+  // repoContainerEl.textContent = "";
   repoSearchTerm.textContent = searchTerm;
 
   // loop over repos
   for (var i = 0; i < repos.length; i++) {
     // format repo name
     var repoName = repos[i].owner.login + "/" + repos[i].name;
-    var repo = repoName
+    // var repo = repoName
 
     // create a container for each repo
     var repoEl = document.createElement("a");
@@ -98,3 +100,6 @@ var displayRepos = function (repos, searchTerm) {
     repoContainerEl.appendChild(repoEl);
   }
 };
+
+// add event listeners to forms
+userFormEl.addEventListener("submit", formSubmitHandler);
