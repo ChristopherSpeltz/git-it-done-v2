@@ -14,7 +14,7 @@ var formSubmitHandler = function (event) {
     getUsersRepos(username);
 
     // clear old content
-    repoContainerEl.textContent = ""
+    repoContainerEl.textContent = "";
     nameInputEl.value = "";
   } else {
     alert("Please enter a GitHub username");
@@ -44,7 +44,6 @@ var getUsersRepos = function (user) {
     });
 };
 
-
 // function will accept both the array of repository data and the term we searched for as parameters
 var displayRepos = function (repos, searchTerm) {
   console.log(repos);
@@ -69,7 +68,7 @@ var displayRepos = function (repos, searchTerm) {
     // create a container for each repo
     var repoEl = document.createElement("a");
     repoEl.classList = "list-item flex-row justify-space-between align-center";
-    repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName)
+    repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
 
     // create a span element to hold repository name
     var titleEl = document.createElement("span");
@@ -102,10 +101,23 @@ var displayRepos = function (repos, searchTerm) {
 };
 
 var getFeaturedRepos = function (language) {
-  var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues"
+  var apiUrl =
+    "https://api.github.com/search/repositories?q=" +
+    language +
+    "+is:featured&sort=help-wanted-issues";
 
-  fetch(apiUrl)
-}
+  fetch(apiUrl).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        displayRepos(data.items, language)
+        console.log(data)
+      })
+      // console.log(response);
+    } else {
+      alert("Error: GitHub User Not Found");
+    }
+  });
+};
 
 // add event listeners to forms
 userFormEl.addEventListener("submit", formSubmitHandler);
