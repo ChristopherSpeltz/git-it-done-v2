@@ -2,6 +2,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonEl = document.querySelector("#language-buttons");
 
 // function to be executed upon a form submission browser event
 var formSubmitHandler = function (event) {
@@ -109,9 +110,9 @@ var getFeaturedRepos = function (language) {
   fetch(apiUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        displayRepos(data.items, language)
-        console.log(data)
-      })
+        displayRepos(data.items, language);
+        console.log(data);
+      });
       // console.log(response);
     } else {
       alert("Error: GitHub User Not Found");
@@ -119,5 +120,19 @@ var getFeaturedRepos = function (language) {
   });
 };
 
+var buttonClickHandler = function (event) {
+  var language = event.target.getAttribute("data-language");
+  if (language) {
+    getFeaturedRepos(language);
+
+    // clear old content
+    repoContainerEl.textContent = "";
+  }
+  console.log(language);
+};
+
 // add event listeners to forms
 userFormEl.addEventListener("submit", formSubmitHandler);
+
+// event listeners for language buttons
+languageButtonEl.addEventListener("click", buttonClickHandler);
